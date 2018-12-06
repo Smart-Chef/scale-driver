@@ -36,6 +36,7 @@ hx.reset()
 hx.tare()
 
 soc = MySocket()
+GPIO.setup(15, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 while True:
     try:
@@ -47,8 +48,17 @@ while True:
         # print binary_string + " " + np_arr8_string
 
         # Prints the weight. Comment if you're debbuging the MSB and LSB issue.
+        if GPIO.input(15) == GPIO.HIGH:
+            hx.tare()
+            print "Tare!"
+
         val = hx.get_weight(5)
+
+        # if val < 0: 
+        #     val = 0
+
         print val
+
         soc.mysend(str(val))
 
         hx.power_down()
